@@ -21,7 +21,7 @@ transfac_file = "BCL6.H12CORE.0.PSM.A_transfac_format.txt"  # File Transfac nell
 pwm = load_pwm(transfac_file)
 
 # Definisci la sequenza di DNA da analizzare
-dna_sequence = Seq("AGCTTAGCTTTCAGGAATTAGGCTTAGGCTT")# Sostituisci con la sequenza da analizzare
+#dna_sequence = Seq("AGCTTAGCTTTCAGGAATTAGGCTTAGGCTT")# Sostituisci con la sequenza da analizzare
 def load_sequence(dna_file_path):
     with open(dna_file_path) as f:
         fasta_sequences = SeqIO.parse(f, "fasta")
@@ -29,7 +29,7 @@ def load_sequence(dna_file_path):
             return str(fasta.seq)
 
 # Carica la sequenza da analizzare
-dna_file_path = "sequence.fasta"  # File FASTA nella directory del progetto
+dna_file_path = "Homo_Sapiens_chromosome_3_BCL6_protein_gene_exon1_sequence.fasta"  # File FASTA nella directory del progetto
 dna_sequence = load_sequence(dna_file_path)
 
 # Cerca i siti di legame nella sequenza
