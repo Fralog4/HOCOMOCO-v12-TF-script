@@ -7,9 +7,9 @@ def plot_score_distribution(binding_sites):
     scores = [score for _, score in binding_sites]
     plt.figure(figsize=(8, 5))
     plt.hist(scores, bins=10, color="grey", edgecolor="black")
-    plt.xlabel("Punteggio PWM")
-    plt.ylabel("Frequenza")
-    plt.title("Distribuzione dei punteggi dei motivi di legame trovati")
+    plt.xlabel("PWM score")
+    plt.ylabel("Frequency")
+    plt.title("Distribution of PWM scores founded in the sequence")
     plt.show()
 
 
