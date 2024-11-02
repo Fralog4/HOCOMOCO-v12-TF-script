@@ -1,6 +1,28 @@
 from Bio import motifs
-from Bio.Seq import Seq
 from Bio import SeqIO
+import matplotlib.pyplot as plt
+
+def plot_binding_sites(sequence, pwm, threshold):
+    scores = [pwm.calculate(sequence[i:i+len(pwm)]) for i in range(len(sequence) - len(pwm) + 1)]
+    positions = list(range(len(scores)))
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(positions, scores, label="Punteggio PWM", color="blue")
+    plt.axhline(y=threshold, color="red", linestyle="--", label="Threshold")
+    plt.xlabel("Posizione nella Sequenza")
+    plt.ylabel("Punteggio PWM")
+    plt.legend()
+    plt.title("Punteggi PWM lungo la sequenza")
+    plt.show()
+
+def plot_score_distribution(binding_sites):
+    scores = [score for _, score in binding_sites]
+    plt.figure(figsize=(8, 5))
+    plt.hist(scores, bins=10, color="skyblue", edgecolor="black")
+    plt.xlabel("Punteggio PWM")
+    plt.ylabel("Frequenza")
+    plt.title("Distribuzione dei punteggi dei siti di legame trovati")
+    plt.show()
 
 # Funzione per caricare PWM da un file in formato Trasfac
 def load_pwm(file_path):
@@ -16,30 +38,28 @@ def find_binding_sites(sequence, pwm, threshold=0.8):
         matches.append((position, score))
     return matches
 
-# Definisci il percorso del file Transfac e carica il modello PWM
-transfac_file = "BCL6.H12CORE.0.PSM.A_transfac_format.txt"  # File Transfac nella directory del progetto
-pwm = load_pwm(transfac_file)
-
 # Definisci la sequenza di DNA da analizzare
-#dna_sequence = Seq("AGCTTAGCTTTCAGGAATTAGGCTTAGGCTT")# Sostituisci con la sequenza da analizzare
 def load_sequence(dna_file_path):
     with open(dna_file_path) as f:
         fasta_sequences = SeqIO.parse(f, "fasta")
         for fasta in fasta_sequences:
             return str(fasta.seq)
 
-# Carica la sequenza da analizzare
-dna_file_path = "Homo_Sapiens_chromosome_3_BCL6_protein_gene_exon1_sequence.fasta"  # File FASTA nella directory del progetto
-dna_sequence = load_sequence(dna_file_path)
+def main():
+    dna_file_path = "Homo_Sapiens_chromosome_3_BCL6_protein_gene_exon1_sequence.fasta"
+    pwm_file_path = "BCL6.H12CORE.0.PSM.A_transfac_format.txt"
+    dna_sequence = load_sequence(dna_file_path)
+    pwm = load_pwm(pwm_file_path)
+    threshold = 0.8
+    binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
+    #plot_binding_sites(dna_sequence, pwm, threshold)
+    #plot_score_distribution(binding_sites)
+    if binding_sites:
+        print("Siti di legame trovati:")
+        for position, score in binding_sites:
+            print(f"Posizione: {position}, Punteggio: {score:.2f}")
+    else:
+        print("Nessun sito di legame trovato sopra la soglia.")
 
-# Cerca i siti di legame nella sequenza
-threshold = 0.8  # Regola il threshold per il punteggio
-binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
-
-# Stampa i risultati
-if binding_sites:
-    print("Siti di legame trovati:")
-    for position, score in binding_sites:
-        print(f"Posizione: {position}, Punteggio: {score:.2f}")
-else:
-    print("Nessun sito di legame trovato sopra la soglia.")
+if __name__ == "__main__":
+    main()
