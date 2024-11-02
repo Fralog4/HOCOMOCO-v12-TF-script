@@ -1,19 +1,7 @@
-from Bio import motifs
-from Bio import SeqIO
 import matplotlib.pyplot as plt
+from Bio import SeqIO
+from Bio import motifs
 
-def plot_binding_sites(sequence, pwm, threshold):
-    scores = [pwm.calculate(sequence[i:i+len(pwm)]) for i in range(len(sequence) - len(pwm) + 1)]
-    positions = list(range(len(scores)))
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(positions, scores, label="Punteggio PWM", color="blue")
-    plt.axhline(y=threshold, color="red", linestyle="--", label="Threshold")
-    plt.xlabel("Posizione nella Sequenza")
-    plt.ylabel("Punteggio PWM")
-    plt.legend()
-    plt.title("Punteggi PWM lungo la sequenza")
-    plt.show()
 
 def plot_score_distribution(binding_sites):
     scores = [score for _, score in binding_sites]
@@ -24,26 +12,39 @@ def plot_score_distribution(binding_sites):
     plt.title("Distribuzione dei punteggi dei motivi di legame trovati")
     plt.show()
 
+
 # Funzione per caricare PWM da un file in formato Trasfac
 def load_pwm(file_path):
     with open(file_path) as f:
-        motifs_list = motifs.parse(f, "transfac")  # Leggi tutti i motivi dal file Transfac
-        pwm = motifs_list[0].pssm  # Prendi il primo motivo, convertito in Position-Specific Scoring Matrix (PSSM)
+        motifs_list = motifs.parse(f, "transfac")  # Reads the motifs from the file in Transfac format
+        pwm = motifs_list[0].pssm  # Take the first one and convert it to PWM
     return pwm
 
-# Funzione per cercare siti di legame in una sequenza
+
 def find_binding_sites(sequence, pwm, threshold=0.8):
+    """
+    Finds the binding sites of a given PWM in a DNA sequence.
+
+    Args:
+        sequence (str): The DNA sequence to search for binding sites.
+        pwm (motifs.PSSM): The PWM to use for searching.
+        threshold (float, optional): The minimum score required for a match. Defaults to 0.8.
+
+    Returns:
+        list[tuple[int, float]]: A list of tuples, where the first element of each tuple is the position of the binding site, and the second element is the score of the match.
+    """
     matches = []
     for position, score in pwm.search(sequence, threshold):
         matches.append((position, score))
     return matches
 
-# Definisci la sequenza di DNA da analizzare
+
 def load_sequence(dna_file_path):
     with open(dna_file_path) as f:
         fasta_sequences = SeqIO.parse(f, "fasta")
         for fasta in fasta_sequences:
             return str(fasta.seq)
+
 
 def main():
     dna_file_path = "Homo_Sapiens_chromosome_3_BCL6_protein_gene_exon1_sequence.fasta"
@@ -52,14 +53,13 @@ def main():
     pwm = load_pwm(pwm_file_path)
     threshold = 0.8
     binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
-    #plot_binding_sites(dna_sequence, pwm, threshold)
     plot_score_distribution(binding_sites)
     if binding_sites:
-        print("Siti di legame trovati:")
         for position, score in binding_sites:
-            print(f"Motivo trovato nella sequenza di DNA del gene alla posizione {position} con un punteggio di similarità di {score:.2f}")
+            print(f"Motif founded into the DNA sequence at position {position} with a similarity score of {score:.2f}")
     else:
-        print("Nessun sito di legame trovato sopra la soglia, Nessun motivo di legame trovato.")
+        print("No binding sites found above the threshold, No binding sites found.")
+
 
 if __name__ == "__main__":
     main()
