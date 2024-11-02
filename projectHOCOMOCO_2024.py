@@ -13,7 +13,6 @@ def plot_score_distribution(binding_sites):
     plt.show()
 
 
-# Funzione per caricare PWM da un file in formato Trasfac
 def load_pwm(file_path):
     with open(file_path) as f:
         motifs_list = motifs.parse(f, "transfac")  # Reads the motifs from the file in Transfac format
