@@ -18,10 +18,10 @@ def plot_binding_sites(sequence, pwm, threshold):
 def plot_score_distribution(binding_sites):
     scores = [score for _, score in binding_sites]
     plt.figure(figsize=(8, 5))
-    plt.hist(scores, bins=10, color="skyblue", edgecolor="black")
+    plt.hist(scores, bins=10, color="grey", edgecolor="black")
     plt.xlabel("Punteggio PWM")
     plt.ylabel("Frequenza")
-    plt.title("Distribuzione dei punteggi dei siti di legame trovati")
+    plt.title("Distribuzione dei punteggi dei motivi di legame trovati")
     plt.show()
 
 # Funzione per caricare PWM da un file in formato Trasfac
@@ -53,13 +53,13 @@ def main():
     threshold = 0.8
     binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
     #plot_binding_sites(dna_sequence, pwm, threshold)
-    #plot_score_distribution(binding_sites)
+    plot_score_distribution(binding_sites)
     if binding_sites:
         print("Siti di legame trovati:")
         for position, score in binding_sites:
-            print(f"Posizione: {position}, Punteggio: {score:.2f}")
+            print(f"Motivo trovato nella sequenza di DNA del gene alla posizione {position} con un punteggio di similarità di {score:.2f}")
     else:
-        print("Nessun sito di legame trovato sopra la soglia.")
+        print("Nessun sito di legame trovato sopra la soglia, Nessun motivo di legame trovato.")
 
 if __name__ == "__main__":
     main()
