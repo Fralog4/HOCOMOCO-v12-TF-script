@@ -46,7 +46,7 @@ def load_sequence(dna_file_path):
 
 
 def main():
-    dna_file_path = "Homo_Sapiens_chromosome_3_BCL6_protein_gene_exon1_sequence.fasta"
+    dna_file_path = "BCL6-FASTA-ENSEMBL-Promotore.fasta"
     pwm_file_path = "BCL6.H12CORE.0.PSM.A_transfac_format.txt"
     dna_sequence = load_sequence(dna_file_path)
     pwm = load_pwm(pwm_file_path)
