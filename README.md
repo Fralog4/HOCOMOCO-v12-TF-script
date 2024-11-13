@@ -1,4 +1,4 @@
-# DNA Binding Site Analyzer
+# DNA Binding Site Analyzer  🧬
 
 This Python program is designed to analyze DNA sequences and identify binding sites for a given Transcription Factor (TF) using a Position Weight Matrix (PWM).
 
