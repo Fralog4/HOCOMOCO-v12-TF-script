@@ -23,3 +23,6 @@ You can install the required dependencies using pip:
 ```bash
 pip install biopython matplotlib
 ``` 
+
+## Usage example
+![img.png](img.png)
