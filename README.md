@@ -25,4 +25,4 @@ pip install biopython matplotlib
 ``` 
 
 ## Usage example
-![img.png](img.png)
+![img_1.png](img_1.png)

@@ -3,13 +3,31 @@ from Bio import SeqIO
 from Bio import motifs
 
 
-def plot_score_distribution(binding_sites):
+def plot_binding_sites(sequence, binding_sites):
+    """
+    Plots the DNA sequence highlighting the binding sites.
+
+    Args:
+        sequence (str): The DNA sequence to analyze.
+        binding_sites (list[tuple[int, float]]): List of binding site positions and scores.
+    """
+    sequence_length = len(sequence)
+    positions = [position for position, _ in binding_sites]
     scores = [score for _, score in binding_sites]
-    plt.figure(figsize=(8, 5))
-    plt.hist(scores, bins=10, color="grey", edgecolor="black")
-    plt.xlabel("PWM score")
-    plt.ylabel("Frequency")
-    plt.title("Distribution of PWM scores founded in the sequence")
+    plt.figure(figsize=(12, 4))
+    plt.plot(range(sequence_length), [0] * sequence_length, color="lightgrey", lw=0.5,
+             label="DNA sequence")  # Sequenza come linea piatta
+    plt.scatter(positions, [0] * len(positions), c=scores, cmap="viridis", edgecolor="black", s=100,
+                label="Binding sites")
+    for pos, score in zip(positions, scores):
+        plt.text(pos, 0.1, f"Similarity score: {score:.2f}", fontsize=8, ha="center", rotation=90, color="red")
+
+    plt.xlabel("Position in DNA sequence")
+    plt.ylabel("Binding Sites")
+    plt.title("Highlighted Binding Sites on the DNA Sequence")
+    plt.colorbar(label="PWM score", orientation="vertical")
+    plt.legend(loc="upper right")
+    plt.tight_layout()
     plt.show()
 
 
@@ -50,10 +68,12 @@ def main():
     pwm_file_path = "BCL6.H12CORE.0.PSM.A_transfac_format.txt"
     dna_sequence = load_sequence(dna_file_path)
     pwm = load_pwm(pwm_file_path)
-    threshold = 0.8
+    threshold = 0.9
     binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
-    plot_score_distribution(binding_sites)
+
+    # Visualizzazione dei siti di legame
     if binding_sites:
+        plot_binding_sites(dna_sequence, binding_sites)
         for position, score in binding_sites:
             print(f"Motif founded into the DNA sequence at position {position} with a similarity score of {score:.2f}")
     else:
