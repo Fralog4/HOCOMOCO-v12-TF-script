@@ -22,7 +22,7 @@ def plot_binding_sites(sequence, binding_sites):
     for pos, score in zip(positions, scores):
         plt.text(pos, 0.1, f"Similarity score: {score:.2f}", fontsize=8, ha="center", rotation=90, color="red")
 
-    plt.xlabel("Position in DNA sequence")
+    plt.xlabel("Position in TP53 DNA sequence")
     plt.ylabel("Binding Sites")
     plt.title("Highlighted Binding Sites on the DNA Sequence")
     plt.colorbar(label="PWM score", orientation="vertical")
@@ -64,11 +64,11 @@ def load_sequence(dna_file_path):
 
 
 def main():
-    dna_file_path = "BCL6-FASTA-ENSEMBL-Promotore.fasta"
+    dna_file_path = "TP53-HUMAN-FASTA.fasta"
     pwm_file_path = "BCL6.H12CORE.0.PSM.A_transfac_format.txt"
     dna_sequence = load_sequence(dna_file_path)
     pwm = load_pwm(pwm_file_path)
-    threshold = 0.9
+    threshold = 0.8
     binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
 
     # Visualizzazione dei siti di legame
