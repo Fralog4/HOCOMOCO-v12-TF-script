@@ -71,7 +71,6 @@ def main():
     threshold = 0.8
     binding_sites = find_binding_sites(dna_sequence, pwm, threshold)
 
-    # Visualizzazione dei siti di legame
     if binding_sites:
         plot_binding_sites(dna_sequence, binding_sites)
         for position, score in binding_sites:
